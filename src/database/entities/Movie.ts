@@ -1,6 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  Unique,
+} from 'typeorm';
 import { Session } from './Session';
 @Entity()
+@Unique(['name'])
 export class Movie {
   @PrimaryGeneratedColumn()
   id: number;
@@ -17,8 +24,8 @@ export class Movie {
   @Column()
   actors: [string];
 
-  @Column()
-  release_date: string;
+  @Column({ type: 'datetime' })
+  release_date: Date;
 
   @OneToMany(() => Session, (session) => session.movie)
   sessions: Session[];
