@@ -1,7 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Session } from './Session';
 @Entity()
-export class Photo {
+export class Movie {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,4 +19,7 @@ export class Photo {
 
   @Column()
   release_date: string;
+
+  @OneToMany(() => Session, (session) => session.movie)
+  sessions: Session[];
 }
