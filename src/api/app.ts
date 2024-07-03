@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
 import 'reflect-metadata';
 import { AppDataSource } from '../database/data-source';
-import routes from '../routes/main';
 
 const app = express();
 
@@ -10,7 +9,6 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use(express.json());
-app.use(routes);
 
 AppDataSource.initialize()
   .then(async () => {})

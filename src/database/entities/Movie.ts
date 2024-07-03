@@ -21,12 +21,18 @@ export class Movie {
   @Column()
   image: string;
 
+  @Column({
+    type: 'text',
+    transformer: {
+      to: (value: string[]): string => value.join(','),
+      from: (value: string): string[] => value.split(','),
+    },
+  })
+  actors: string[];
+
   @Column()
-  actors: [string];
+  release_date: string;
 
-  @Column({ type: 'datetime' })
-  release_date: Date;
-
-  @OneToMany(() => Session, (session) => session.movie)
+  @OneToMany(() => Session, (session) => session.movie, { cascade: true })
   sessions: Session[];
 }
