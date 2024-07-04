@@ -1,26 +1,24 @@
 {
   "compilerOptions": {
-   
-  
-    "target": "es2016",                                 
-    "lib": ["es6"],     
+    "target": "es2016",
+    "lib": ["es6"],
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true, 
-    "module": "commonjs",                               
-    "rootDir": "src",                                  
+    "emitDecoratorMetadata": true,
+    "module": "commonjs",
+    "rootDir": "src",
     "baseUrl": "./",
     "typeRoots": [
       "@types",
       "./node_modules/@types"
     ],
     "resolveJsonModule": true,
-    "esModuleInterop": true,                        
-    "allowJs": true,                                    
-    "outDir": "build",                                                           
-    "forceConsistentCasingInFileNames": true,           
-    "strict": true,                                      
+    "esModuleInterop": true,
+    "allowJs": true,
+    "outDir": "build",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
     "noImplicitAny": true,
-    "strictPropertyInitialization": false,                                        
-    "skipLibCheck": true                                 
+    "strictPropertyInitialization": false,
+    "skipLibCheck": true
   }
 }
