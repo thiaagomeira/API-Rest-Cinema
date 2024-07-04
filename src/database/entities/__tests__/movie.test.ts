@@ -1,4 +1,4 @@
-import { Connection, Repository, createConnection, getRepository } from 'typeorm';
+import { Connection, Repository, createConnection } from 'typeorm';
 
 import { Movie } from '../Movie';
 import { Session } from '../Session';
@@ -28,7 +28,6 @@ describe('Movie Entity', () => {
   });
 
   it('should create a movie with formatted release date', async () => {
-    const movieRepository = getRepository(Movie);
     const movie = new Movie();
     movie.name = 'Inception';
     movie.description = 'A mind-bending thriller';
@@ -48,7 +47,6 @@ describe('Movie Entity', () => {
   });
 
   it('should not allow duplicate movie names', async () => {
-    const movieRepository = getRepository(Movie);
 
     const movie1 = new Movie();
     movie1.name = 'Duplicate Test';
@@ -86,7 +84,10 @@ describe('Movie Entity', () => {
 
     await movieRepository.save(movie);
 
-    const savedMovie = await movieRepository.findOne({ where: { name: 'Interstellar' }, relations: ['sessions'] });
+    const savedMovie = await movieRepository.findOne({
+      where: { name: 'Interstellar' },
+      relations: ['sessions'],
+    });
     expect(savedMovie).toBeDefined();
     expect(savedMovie!.sessions).toHaveLength(1);
     expect(savedMovie!.sessions[0].room).toBe('Room A');
