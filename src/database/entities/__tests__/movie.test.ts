@@ -47,7 +47,6 @@ describe('Movie Entity', () => {
   });
 
   it('should not allow duplicate movie names', async () => {
-
     const movie1 = new Movie();
     movie1.name = 'Duplicate Test';
     movie1.description = 'First Entry';
