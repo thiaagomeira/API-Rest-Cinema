@@ -1,13 +1,16 @@
 import { Request, Response } from 'express';
 import * as movieService from '../services/movieService';
 
-const handleAsync = (fn: Function) => async (req: Request, res: Response) => {
-  try {
-    await fn(req, res);
-  } catch (error) {
-    res.status(500).json({ message: 'Ocorreu um erro!', error });
-  }
-};
+type AsyncHandler = (req: Request, res: Response) => Promise<void>;
+
+const handleAsync =
+  (fn: AsyncHandler) => async (req: Request, res: Response) => {
+    try {
+      await fn(req, res);
+    } catch (error) {
+      res.status(500).json({ message: 'Ocorreu um erro!', error });
+    }
+  };
 
 export const getMovies = handleAsync(async (req: Request, res: Response) => {
   const movies = await movieService.getMovies();
@@ -29,7 +32,10 @@ export const createMovie = handleAsync(async (req: Request, res: Response) => {
 });
 
 export const updateMovie = handleAsync(async (req: Request, res: Response) => {
-  const updatedMovie = await movieService.updateMovie(Number(req.params.id), req.body);
+  const updatedMovie = await movieService.updateMovie(
+    Number(req.params.id),
+    req.body,
+  );
   if (updatedMovie) {
     res.json(updatedMovie);
   } else {

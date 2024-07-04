@@ -16,12 +16,17 @@ export const getMovieById = async (id: number): Promise<Movie | undefined> => {
   return movie || undefined;
 };
 
-export const createMovie = async (movieData: Partial<Movie>): Promise<Movie> => {
+export const createMovie = async (
+  movieData: Partial<Movie>,
+): Promise<Movie> => {
   const newMovie = movieRepository.create(movieData);
   return await movieRepository.save(newMovie);
 };
 
-export const updateMovie = async (id: number, movieData: Partial<Movie>): Promise<Movie | undefined> => {
+export const updateMovie = async (
+  id: number,
+  movieData: Partial<Movie>,
+): Promise<Movie | undefined> => {
   await movieRepository.update(id, movieData);
   return await movieRepository.findOne(id);
 };
