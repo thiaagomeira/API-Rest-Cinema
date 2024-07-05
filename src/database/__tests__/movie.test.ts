@@ -1,7 +1,7 @@
 import { Connection, Repository, createConnection } from 'typeorm';
 
-import { Movie } from '../Movie';
-import { Session } from '../Session';
+import { Movie } from '../entities/Movie';
+import { Session } from '../entities/Session';
 
 describe('Movie Entity', () => {
   let connection: Connection;
