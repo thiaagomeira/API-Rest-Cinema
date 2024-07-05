@@ -4,8 +4,10 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Movie } from './Movie';
+import { Ticket } from './Ticket';
 
 @Entity()
 export class Session {
@@ -27,4 +29,10 @@ export class Session {
 
   @Column()
   time: string;
+
+  @OneToMany(() => Ticket, (ticket) => ticket.session, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  tickets: Ticket[];
 }
