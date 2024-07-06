@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import 'reflect-metadata';
+import cors from 'cors';
 import { AppDataSource } from '../database/data-source';
 import routes from './routes';
 
@@ -11,6 +12,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use(express.json());
 app.use(routes);
+app.use(cors);
 
 AppDataSource.initialize()
   .then(async () => {})

@@ -14,29 +14,46 @@ export const getTickets = async (req: Request, res: Response) => {
   res.status(200).json(tickets);
 };
 
-export const getTicketById = handleAsync(async (req: Request, res: Response) => {
-  const ticket = await ticketService.getTicketById(Number(req.params.id));
-  if (ticket) {
-    res.json(ticket);
-  } else {
-    res.status(404).json({ message: 'Ingresso não encontrado!' });
-  }
-});
+export const getTicketById = handleAsync(
+  async (req: Request, res: Response) => {
+    const ticket = await ticketService.getTicketById(Number(req.params.id));
+    if (ticket) {
+      res.json(ticket);
+    } else {
+      res.status(404).json({ message: 'Ingresso não encontrado!' });
+    }
+  },
+);
 
-export const createTicket = handleAsync(async (req: Request, res: Response) => {
-  const { sessionId } = req.body;
+export const createTicket = async (req: Request, res: Response) => {
   const ticketData = req.body;
+  const { session_id } = req.params;
 
   try {
-    const newTicket = await ticketService.createTicket(sessionId, ticketData);
-    res.status(201).json(newTicket);
+    const result = await ticketService.createTicket(
+      Number(session_id),
+      ticketData,
+    );
+    if ('code' in result) {
+      res.status(result.code).json(result);
+    } else {
+      res.status(201).json({
+        id: result.id,
+        session_id: result.session.id,
+        chair: result.chair,
+        value: result.value,
+      });
+    }
   } catch (error) {
-    res.status(500).json({ message: 'Falha ao criar ingresso!', error });
+    res.status(500).json(error);
   }
-});
+};
 
 export const updateTicket = handleAsync(async (req: Request, res: Response) => {
-  const updatedTicket = await ticketService.updateTicket(Number(req.params.id), req.body);
+  const updatedTicket = await ticketService.updateTicket(
+    Number(req.params.id),
+    req.body,
+  );
   if (updatedTicket) {
     res.json(updatedTicket);
   } else {

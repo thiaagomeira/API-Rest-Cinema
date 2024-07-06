@@ -5,7 +5,10 @@ const router = express.Router();
 
 router.get('/tickets', TicketController.getTickets);
 //router.get('/tickets/:id', TicketController.getTicketById);
-//router.post('/tickets', TicketController.createTicket);
+router.post(
+  '/movies/:movie_id/sessions/:session_id/tickets',
+  TicketController.createTicket,
+);
 //router.put('/tickets/:id', TicketController.updateTicket);
 //router.delete('/tickets/:id', TicketController.deleteTicket);
 
