@@ -36,10 +36,12 @@
   },
   "dependencies": {
     "@types/date-fns": "^2.6.0",
+    "celebrate": "^15.0.3",
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "joi": "^17.13.3",
     "prettier": "^3.3.2",
     "reflect-metadata": "^0.2.2",
     "swagger-jsdoc": "^6.2.8",

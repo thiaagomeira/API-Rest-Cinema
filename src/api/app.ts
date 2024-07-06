@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import cors from 'cors';
 import { AppDataSource } from '../database/data-source';
 import routes from './routes';
+import { errors } from 'celebrate';
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use(express.json());
 app.use(routes);
+app.use(errors());
 app.use(cors);
 
 AppDataSource.initialize()
