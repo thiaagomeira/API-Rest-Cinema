@@ -18,7 +18,15 @@ router.post(
   celebrate(schema),
   TicketController.createTicket,
 );
-//router.put('/tickets/:id', TicketController.updateTicket);
-//router.delete('/tickets/:id', TicketController.deleteTicket);
+router.put(
+  '/movies/:movies_id/sessions/:session_id/tickets/:id',
+  celebrate(schema),
+  TicketController.updateTicket,
+);
+
+router.delete(
+  '/movies/:movies_id/sessions/:session_id/tickets/:id',
+  TicketController.deleteTicket,
+);
 
 export default router;

@@ -47,19 +47,42 @@ export const createTicket = async (
   return newTicket;
 };
 
-export const updateTicket = async (id: number, ticketData: Partial<Ticket>): Promise<Ticket | null> => {
+export const updateTicket = async (
+  id: number,
+  sessionId: number,
+  ticketData: Ticket,
+): Promise<Ticket | ErrorResponse> => {
   const ticket = await ticketRepository.findOne({ where: { id } });
   if (!ticket) {
-    throw new Error('Ingresso não encontrado!');
+    return {
+      code: 400,
+      message: 'Ingresso não encontrado!',
+    };
+  }
+  const session = await sessionRepository.findOne({ where: { id: sessionId } });
+  if (!session) {
+    return {
+      code: 400,
+      message: 'Sessão não encontrada!',
+    };
+  }
+  const existingTicket = await ticketRepository.findOne({
+    where: { chair: ticketData.chair, session: { id: sessionId } },
+  });
+  if (existingTicket) {
+    return {
+      code: 400,
+      message: 'A cadeira já está reservada para esta sessão!',
+    };
   }
 
-  const existingTicket = await ticketRepository.findOne({ where: { chair: ticketData.chair, session: { id: ticket.session.id } } });
-  if (existingTicket && existingTicket.id !== id) {
-    throw new Error('A cadeira já está reservada para esta sessão!');
-  }
+  const updatedTicket = new Ticket();
+  updatedTicket.chair = ticketData.chair;
+  updatedTicket.value = ticketData.value;
+  updatedTicket.session = session;
+  await ticketRepository.update(id, ticketData);
 
-  ticketRepository.merge(ticket, ticketData);
-  return await ticketRepository.save(ticket);
+  return updatedTicket;
 };
 
 export const deleteTicket = async (id: number): Promise<boolean> => {
