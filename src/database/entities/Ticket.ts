@@ -18,7 +18,9 @@ export class Ticket {
   @Column()
   value: number;
 
-  @ManyToOne(() => Session, (session) => session.tickets)
+  @ManyToOne(() => Session, (session) => session.tickets, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'session_id' })
   session: Session;
 }

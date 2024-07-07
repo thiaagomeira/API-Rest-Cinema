@@ -14,7 +14,7 @@ export class Session {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Movie, (movie) => movie.sessions)
+  @ManyToOne(() => Movie, (movie) => movie.sessions, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'movie_id' })
   movie: Movie;
 
@@ -30,9 +30,6 @@ export class Session {
   @Column()
   time: string;
 
-  @OneToMany(() => Ticket, (ticket) => ticket.session, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => Ticket, (ticket) => ticket.session, { cascade: true })
   tickets: Ticket[];
 }
