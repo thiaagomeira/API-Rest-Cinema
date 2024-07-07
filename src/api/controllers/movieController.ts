@@ -32,20 +32,22 @@ export const getMovieById = handleAsync(async (req: Request, res: Response) => {
 
 // Criar um novo filme
 export const createMovie = handleAsync(async (req: Request, res: Response) => {
-  const newMovie = await movieService.createMovie(req.body); // Criar um novo filme com base nos dados do corpo da requisição
-  res.status(201).json(newMovie); // Retorna o novo filme criado com status 201 em formato JSON
+  const result = await movieService.createMovie(req.body);
+  if ('code' in result) {
+    res.status(result.code).json(result);
+  } else {
+    res.status(201).json(result);
+  }
 });
 
 // Atualizar um filme existente por ID
 export const updateMovie = handleAsync(async (req: Request, res: Response) => {
-  const updatedMovie = await movieService.updateMovie(
-    Number(req.params.id), // ID do filme a ser atualizado
-    req.body, // Novos dados do filme a serem atualizados
-  );
-  if (updatedMovie) {
-    res.json(updatedMovie); // Se o filme for atualizado com sucesso, retorna o filme atualizado em formato JSON
+  const { id } = req.params;
+  const result = await movieService.updateMovie(Number(id), req.body);
+  if ('code' in result) {
+    res.status(result.code).json(result);
   } else {
-    res.status(404).json({ message: 'Filme não encontrado!' });
+    res.status(200).json(result);
   }
 });
 

@@ -1,5 +1,5 @@
 import express from 'express';
-import * as TicketController from '../controllers/ticketController';
+import * as TicketController from '../api/controllers/ticketController';
 import { celebrate, Joi, Segments } from 'celebrate';
 
 const router = express.Router();

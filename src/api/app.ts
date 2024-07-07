@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import 'reflect-metadata';
 import cors from 'cors';
 import { AppDataSource } from '../database/data-source';
-import routes from './routes';
+import routes from '../routes';
 import { errors } from 'celebrate';
 
 const app = express();
