@@ -1,39 +1,51 @@
-import { getRepository, Repository } from 'typeorm';
-import { Movie } from '../models/movieModels';
+import { Movie } from 'src/database/entities/Movie';
+import { AppDataSource } from 'src/database/data-source';
 
-let movieRepository: Repository<Movie>;
-
-const initializeRepository = () => {
-  movieRepository = getRepository(Movie);
-};
-
+// Obter todos os filmes
 export const getMovies = async (): Promise<Movie[]> => {
-  return await movieRepository.find();
+  const movies = await AppDataSource.manager.find(Movie);
+  return movies;
 };
 
+// Obter um filme pelo ID
 export const getMovieById = async (id: number): Promise<Movie | undefined> => {
-  const movie = await movieRepository.findOne(id);
-  return movie || undefined;
+  const repository = AppDataSource.getRepository(Movie);
+  const movie = await repository.findOneBy({ id });
+  return movie ? movie : undefined;
 };
 
-export const createMovie = async (
-  movieData: Partial<Movie>,
-): Promise<Movie> => {
-  const newMovie = movieRepository.create(movieData);
-  return await movieRepository.save(newMovie);
+// Criar novo filme
+export const createMovie = async (body: Omit<Movie, 'id'>): Promise<Movie> => {
+  const repository = AppDataSource.getRepository(Movie);
+  const movie = repository.create(body);
+  await repository.save(movie);
+  console.log('Foi criado um filme:', movie);
+  return movie;
 };
 
+// Atualizar filme existente
 export const updateMovie = async (
   id: number,
-  movieData: Partial<Movie>,
+  body: Omit<Movie, 'id'>,
 ): Promise<Movie | undefined> => {
-  await movieRepository.update(id, movieData);
-  return await movieRepository.findOne(id);
+  const repository = AppDataSource.getRepository(Movie);
+  const movie = await repository.findOneBy({ id });
+  if (movie) {
+    repository.merge(movie, body);
+    await repository.save(movie);
+    console.log('Foi atualizado um filme:', movie);
+    return movie;
+  }
+  return undefined;
 };
 
+// Deletar filme
 export const deleteMovie = async (id: number): Promise<boolean> => {
-  const result = await movieRepository.delete(id);
-  return result.affected !== 0;
+  const repository = AppDataSource.getRepository(Movie);
+  const result = await repository.delete(id);
+  if (result.affected !== 0) {
+    console.log('Foi deletado um filme com id:', id);
+    return true;
+  }
+  return false;
 };
-
-initializeRepository();

@@ -1,10 +1,11 @@
 export interface Movie {
   id: number;
-  title: string;
+  image: string;
+  name: string;
   description: string;
-  releaseDate: Date;
-  duration: number;
-  director: string;
   cast: string[];
-  genres: string[];
+  genre: string;
+  duration: number;
+  release_date: string; // Formato ISO 8601
 }
+
