@@ -1,4 +1,4 @@
-import { Joi, Segments } from 'celebrate';
+import { Segments, Joi } from 'celebrate';
 
 export const movieSchema = {
   [Segments.BODY]: Joi.object({
@@ -9,8 +9,9 @@ export const movieSchema = {
     name: Joi.string().required().messages({
       'any.required': '"name" é obrigatório',
     }),
-    description: Joi.string().required().messages({
+    description: Joi.string().required().max(100).messages({
       'any.required': '"description" é obrigatório',
+      'string.max': '"description" deve ter no máximo {#limit} caracteres',
     }),
     actors: Joi.array()
       .items(Joi.string().required())
@@ -24,10 +25,13 @@ export const movieSchema = {
     genre: Joi.string().required().messages({
       'any.required': '"genre" é obrigatório',
     }),
-    release_date: Joi.string().required().messages({
-      'any.required': '"release_date" é obrigatório',
-      'any.invalid': '"release_date" deve estar no formato DD/MM/YYYY',
-      'date.invalid': '"release_date" deve ser uma data válida',
-    }),
+    release_date: Joi.string()
+      .regex(/^\d{2}\/\d{2}\/\d{4}( \d{2}:\d{2}:\d{2})?$/)
+      .required()
+      .messages({
+        'any.required': '"release_date" é obrigatório',
+        'string.pattern.base':
+          'O campo release_date deve estar no formato DD/MM/YYYY HH:mm:ss ou DD/MM/YYYY',
+      }),
   }),
 };
