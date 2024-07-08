@@ -8,4 +8,3 @@ export interface Movie {
   duration: number;
   release_date: string; // Formato ISO 8601
 }
-
