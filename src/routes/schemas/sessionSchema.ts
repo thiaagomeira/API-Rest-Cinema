@@ -33,5 +33,10 @@ export const sessionSchema = {
       'number.positive': 'movie_id deve ser um número positivo',
       'any.required': 'movie_id é obrigatório',
     }),
+    id: Joi.number().integer().positive().messages({
+      'number.base': 'id deve ser um número',
+      'number.integer': 'id deve ser um número inteiro',
+      'number.positive': 'id deve ser um número positivo',
+    }),
   }),
 };

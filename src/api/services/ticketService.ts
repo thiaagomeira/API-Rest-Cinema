@@ -6,17 +6,9 @@ const ticketRepository = AppDataSource.getRepository(Ticket);
 const sessionRepository = AppDataSource.getRepository(Session);
 interface ErrorResponse {
   code: number;
+  status: string;
   message: string;
 }
-
-export const getTickets = async (): Promise<Ticket[]> => {
-  const ticket = await AppDataSource.manager.find(Ticket);
-  return ticket;
-};
-
-export const getTicketById = async (id: number): Promise<Ticket | null> => {
-  return await ticketRepository.findOne({ where: { id } });
-};
 
 export const createTicket = async (
   sessionId: number,
@@ -24,7 +16,11 @@ export const createTicket = async (
 ): Promise<Ticket | ErrorResponse> => {
   const session = await sessionRepository.findOne({ where: { id: sessionId } });
   if (!session) {
-    const error = { code: 400, message: 'Sessão não encontrada' };
+    const error = {
+      code: 404,
+      status: 'Not Found',
+      message: 'Sessão não encontrada',
+    };
     return error;
   }
 
@@ -34,6 +30,7 @@ export const createTicket = async (
   if (existingTicket) {
     return {
       code: 400,
+      status: 'Bad Request',
       message: 'O assento já foi reservado.',
     };
   }
@@ -55,15 +52,17 @@ export const updateTicket = async (
   const ticket = await ticketRepository.findOne({ where: { id } });
   if (!ticket) {
     return {
-      code: 400,
+      code: 404,
+      status: 'Not Found',
       message: 'Ingresso não encontrado!',
     };
   }
   const session = await sessionRepository.findOne({ where: { id: sessionId } });
   if (!session) {
     return {
-      code: 400,
-      message: 'Sessão não encontrada!',
+      code: 404,
+      status: 'Not Found',
+      message: `Sessão de id ${sessionId} não encontrada!`,
     };
   }
   const existingTicket = await ticketRepository.findOne({
@@ -72,17 +71,17 @@ export const updateTicket = async (
   if (existingTicket) {
     return {
       code: 400,
+      status: 'Bad Request',
       message: 'A cadeira já está reservada para esta sessão!',
     };
   }
 
-  const updatedTicket = new Ticket();
-  updatedTicket.chair = ticketData.chair;
-  updatedTicket.value = ticketData.value;
-  updatedTicket.session = session;
-  await ticketRepository.update(id, ticketData);
+  ticket.chair = ticketData.chair;
+  ticket.value = ticketData.value;
+  ticket.session = session;
+  const result = await ticketRepository.save(ticket);
 
-  return updatedTicket;
+  return result;
 };
 
 export const deleteTicket = async (id: number): Promise<boolean> => {

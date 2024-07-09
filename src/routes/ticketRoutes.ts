@@ -44,7 +44,7 @@ router.delete(
 
 /**
  * @swagger
- * /movies/{movie_id}/sessions/{session_id}/tickets:
+ * /api/v1/movies/{movie_id}/sessions/{session_id}/tickets:
  *   post:
  *     summary: Cria um novo ticket
  *     tags: [Tickets]
@@ -62,7 +62,7 @@ router.delete(
  *           schema:
  *             $ref: '#/components/schemas/Ticket'
  *     responses:
- *       200:
+ *       201:
  *         description: Ticket criado com sucesso
  *         content:
  *           application/json:
@@ -74,7 +74,7 @@ router.delete(
 
 /**
  * @swagger
- * /movies/{movie_id}/sessions/{session_id}/tickets/{id}:
+ * /api/v1/movies/{movie_id}/sessions/{session_id}/tickets/{id}:
  *   put:
  *     summary: Atualiza um ticket existente
  *     tags: [Tickets]
@@ -112,7 +112,7 @@ router.delete(
 
 /**
  * @swagger
- * /movies/{movie_id}/sessions/{session_id}/tickets/{id}:
+ * /api/v1/movies/{movie_id}/sessions/{session_id}/tickets/{id}:
  *   delete:
  *     summary: Deleta um ticket existente
  *     tags: [Tickets]
@@ -124,7 +124,7 @@ router.delete(
  *           type: integer
  *         description: ID do ticket
  *     responses:
- *       200:
+ *       204:
  *         description: Ticket deletado com sucesso
  *       404:
  *         description: Ticket não encontrado
