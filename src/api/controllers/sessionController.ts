@@ -6,13 +6,25 @@ export const createSession = async (req: Request, res: Response) => {
   const sessionData = req.body;
 
   try {
-    const session = await sessionService.createSession(
+    const result = await sessionService.createSession(
       Number(movie_id),
       sessionData,
     );
-    res.status(201).json(session);
+    if (result.data) {
+      const { id, movie, room, capacity, day, time } = result.data;
+      res
+        .status(result.code)
+        .json({ id, movie_id: movie.id, room, capacity, day, time });
+      return;
+    }
+    res.status(result.code).json(result);
   } catch (error) {
-    res.status(500).json({ message: 'erro ao criar sessao', error });
+    res.status(500).json({
+      code: 500,
+      status: 'Internal Server Error',
+      message: 'Ocorreu um erro inesperado.',
+      details: error,
+    });
   }
 };
 

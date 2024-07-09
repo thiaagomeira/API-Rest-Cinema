@@ -1,4 +1,3 @@
-import { getRepository } from 'typeorm';
 import { AppDataSource } from 'src/database/data-source';
 import { Movie } from 'src/database/entities/Movie';
 import { Session } from 'src/database/entities/Session';
@@ -6,26 +5,60 @@ import { Session } from 'src/database/entities/Session';
 const movieRepository = AppDataSource.getRepository(Movie);
 const sessionRepository = AppDataSource.getRepository(Session);
 
+interface Response {
+  code: number;
+  status: string;
+  message: string;
+  data?: Session;
+}
+
 export const createSession = async (
   movieId: number,
-  sessionData: Partial<Session>,
-): Promise<Session> => {
-  const movie = await movieRepository.findOneById(movieId);
-  if (!movie) {
-    throw new Error('Movie not found');
+  sessionData: Session,
+): Promise<Response> => {
+  const findMovie = await movieRepository.findOne({
+    where: { id: movieId },
+  });
+
+  if (!findMovie)
+    return {
+      code: 404,
+      status: 'Not Found',
+      message: `Não foi encontrado filme de id ${movieId}`,
+    };
+
+  const existingSession = await sessionRepository.findOne({
+    where: {
+      room: sessionData.room,
+      day: sessionData.day,
+      time: sessionData.time,
+    },
+  });
+  if (existingSession) {
+    return {
+      code: 400,
+      status: 'Bad Request',
+      message: 'Já existe uma sessão cadastrada nessa sala no mesmo horário',
+    };
   }
 
-  const session = sessionRepository.create({ ...sessionData, movie });
-  return await sessionRepository.save(session);
+  const session = new Session();
+  session.capacity = sessionData.capacity;
+  session.day = sessionData.day;
+  session.movie = findMovie;
+  session.room = sessionData.room;
+  session.time = sessionData.time;
+
+  const result = await sessionRepository.save(session);
+
+  return { code: 201, status: 'Created', message: '', data: result };
 };
 
 export const updateSession = async (
   movieId: number,
   sessionId: number,
   sessionData: Partial<Session>,
-): Promise<Session> => {
-  const sessionRepository = getRepository(Session);
-
+): Promise<Response> => {
   const session = await sessionRepository.findOne({
     where: { id: sessionId, movie: { id: movieId } },
   });
@@ -40,9 +73,7 @@ export const updateSession = async (
 export const deleteSession = async (
   movieId: number,
   sessionId: number,
-): Promise<void> => {
-  const sessionRepository = getRepository(Session);
-
+): Promise<Response> => {
   const session = await sessionRepository.findOne({
     where: { id: sessionId, movie: { id: movieId } },
   });
@@ -51,9 +82,4 @@ export const deleteSession = async (
   }
 
   await sessionRepository.remove(session);
-};
-
-export const getSession = async (): Promise<Session[]> => {
-  const sessionRepository = await AppDataSource.manager.find(Session);
-  return sessionRepository;
 };
