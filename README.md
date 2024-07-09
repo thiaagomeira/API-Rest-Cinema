@@ -13,7 +13,7 @@ Se você ainda não possui o `nvm` instalado, siga os passos abaixo:
 Para sistemas Windows, recomendamos o uso do nvm-windows.
 
 ```bash
-curl -o- https://github.com/coreybutler/nvm-windows | bash
+https://github.com/coreybutler/nvm-windows
 ```
 
 Após a instalação do nvm, reinicie o seu computador e instale a versão 18.18.2 do Node.js:
