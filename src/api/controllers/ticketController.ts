@@ -65,6 +65,10 @@ export const deleteTicket = async (req: Request, res: Response) => {
   if (success) {
     res.status(204).send();
   } else {
-    res.status(404).json({ message: 'Ingresso não encontrado!' });
+    res.status(404).json({
+      code: 404,
+      status: 'Not Found',
+      message: 'Ingresso não encontrado!',
+    });
   }
 };
