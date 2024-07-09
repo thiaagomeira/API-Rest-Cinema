@@ -1,6 +1,6 @@
-import { AppDataSource } from 'src/database/data-source';
-import { Movie } from 'src/database/entities/Movie';
-import { Session } from 'src/database/entities/Session';
+import { AppDataSource } from '../../database/data-source';
+import { Movie } from '../../database/entities/Movie';
+import { Session } from '../../database/entities/Session';
 
 const movieRepository = AppDataSource.getRepository(Movie);
 const sessionRepository = AppDataSource.getRepository(Session);

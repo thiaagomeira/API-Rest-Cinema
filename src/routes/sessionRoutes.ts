@@ -4,7 +4,7 @@ import {
   createSession,
   updateSession,
   deleteSession,
-} from 'src/api/controllers/sessionController';
+} from '../api/controllers/sessionController';
 import { sessionSchema } from './schemas/sessionSchema';
 
 const router = Router();
