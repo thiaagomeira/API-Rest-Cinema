@@ -67,19 +67,45 @@ export const updateSession = async (
   }
 
   sessionRepository.merge(session, sessionData);
-  return await sessionRepository.save(session);
+  const result = await sessionRepository.save(session);
+  return {
+    code: 200,
+    status: '',
+    message: '',
+    data: result,
+  };
 };
 
 export const deleteSession = async (
-  movieId: number,
   sessionId: number,
+  movieId: number,
 ): Promise<Response> => {
   const session = await sessionRepository.findOne({
+    where: { id: sessionId },
+  });
+  const sessionMovie = await sessionRepository.findOne({
     where: { id: sessionId, movie: { id: movieId } },
   });
   if (!session) {
-    throw new Error('Session not found');
+    return {
+      code: 404,
+      status: 'Not Found',
+      message: `Não foi encontrado sessão de id ${sessionId}`,
+    };
+  }
+
+  if (!sessionMovie) {
+    return {
+      code: 404,
+      status: 'Not Found',
+      message: `Sessão de id ${sessionId} não está relacionada ao filme de id ${movieId}`,
+    };
   }
 
   await sessionRepository.remove(session);
+  return {
+    code: 204,
+    status: 'Deleted',
+    message: '',
+  };
 };

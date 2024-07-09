@@ -40,7 +40,12 @@ export const updateSession = async (req: Request, res: Response) => {
     );
     res.json(session);
   } catch (error) {
-    res.status(500).json({ message: 'erro ao criar sessao', error });
+    res.status(500).json({
+      code: 500,
+      status: 'Internal Server Error',
+      message: 'Ocorreu um erro inesperado.',
+      details: error,
+    });
   }
 };
 
@@ -48,14 +53,21 @@ export const deleteSession = async (req: Request, res: Response) => {
   const { movie_id, id } = req.params;
 
   try {
-    await sessionService.deleteSession(Number(movie_id), Number(id));
+    const result = await sessionService.deleteSession(
+      Number(id),
+      Number(movie_id),
+    );
+    if (result.code === 404) {
+      res.status(404).json(result);
+      return;
+    }
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ message: 'erro ao criar sessao', error });
+    res.status(500).json({
+      code: 500,
+      status: 'Internal Server Error',
+      message: 'Ocorreu um erro inesperado.',
+      details: error,
+    });
   }
-};
-
-export const getSession = async (req: Request, res: Response) => {
-  const sessionRepository = await sessionService.getSession();
-  res.status(200).json(sessionRepository);
 };
