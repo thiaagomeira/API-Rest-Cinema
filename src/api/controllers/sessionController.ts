@@ -29,16 +29,20 @@ export const createSession = async (req: Request, res: Response) => {
 };
 
 export const updateSession = async (req: Request, res: Response) => {
-  const { movie_id, id } = req.params;
-  const sessionData = req.body;
-
   try {
+    const sessionData = req.body;
+    const { movie_id, id } = req.params;
     const session = await sessionService.updateSession(
-      Number(movie_id),
       Number(id),
+      Number(movie_id),
       sessionData,
     );
-    res.json(session);
+
+    if (session.code === 200) {
+      res.status(200).json(session.data);
+      return;
+    }
+    res.status(session.code).json(session);
   } catch (error) {
     res.status(500).json({
       code: 500,

@@ -55,18 +55,51 @@ export const createSession = async (
 };
 
 export const updateSession = async (
-  movieId: number,
   sessionId: number,
-  sessionData: Partial<Session>,
+  movieId: number,
+  sessionData: Session,
 ): Promise<Response> => {
   const session = await sessionRepository.findOne({
-    where: { id: sessionId, movie: { id: movieId } },
+    where: { id: sessionId },
   });
   if (!session) {
-    throw new Error('Session not found');
+    return {
+      code: 404,
+      status: 'Not Found',
+      message: `Não foi encontrado sessão de id ${sessionId}`,
+    };
   }
 
-  sessionRepository.merge(session, sessionData);
+  const movie = await movieRepository.findOne({ where: { id: movieId } });
+  if (!movie) {
+    return {
+      code: 404,
+      status: 'Not Found',
+      message: `Não foi encontrado filme de id ${movieId}`,
+    };
+  }
+
+  const existingSession = await sessionRepository.findOne({
+    where: {
+      room: sessionData.room,
+      day: sessionData.day,
+      time: sessionData.time,
+    },
+  });
+  if (existingSession) {
+    return {
+      code: 400,
+      status: 'Bad Request',
+      message: 'Já existe uma sessão cadastrada nessa sala no mesmo horário',
+    };
+  }
+
+  session.capacity = sessionData.capacity;
+  session.day = sessionData.day;
+  session.movie = movie;
+  session.room = sessionData.room;
+  session.time = sessionData.time;
+
   const result = await sessionRepository.save(session);
   return {
     code: 200,
