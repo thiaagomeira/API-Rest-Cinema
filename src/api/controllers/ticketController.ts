@@ -1,20 +1,6 @@
 import { Request, Response } from 'express';
 import * as ticketService from '../services/ticketService';
 
-export const getTickets = async (req: Request, res: Response) => {
-  const tickets = await ticketService.getTickets();
-  res.status(200).json(tickets);
-};
-
-export const getTicketById = async (req: Request, res: Response) => {
-  const ticket = await ticketService.getTicketById(Number(req.params.id));
-  if (ticket) {
-    res.json(ticket);
-  } else {
-    res.status(404).json({ message: 'Ingresso não encontrado!' });
-  }
-};
-
 export const createTicket = async (req: Request, res: Response) => {
   try {
     const ticketData = req.body;
