@@ -1,6 +1,6 @@
 import { Ticket } from '../../database/entities/Ticket';
 import { Session } from '../../database/entities/Session';
-import { AppDataSource } from 'src/database/data-source';
+import { AppDataSource } from '../../database/data-source';
 
 const ticketRepository = AppDataSource.getRepository(Ticket);
 const sessionRepository = AppDataSource.getRepository(Session);
