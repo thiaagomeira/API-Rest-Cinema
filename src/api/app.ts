@@ -4,7 +4,7 @@ import cors from 'cors';
 import { AppDataSource } from '../database/data-source';
 import routes from '../routes';
 import { errors } from 'celebrate';
-import { swaggerUi, specs } from 'src/swagger';
+import { swaggerUi, specs } from '../swagger';
 
 const app = express();
 

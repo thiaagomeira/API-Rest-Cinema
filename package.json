@@ -4,7 +4,8 @@
   "main": "./src/api/server.js",
   "license": "MIT",
   "scripts": {
-    "start": "node .",
+    "start": "node build/api/server.js",
+    "build": "tsc",
     "lint": "eslint . --fix",
     "test": "jest",
     "dev": "ts-node-dev --inspect --transpile-only -r tsconfig-paths/register --ignore-watch node_modules src/api/server.ts",

@@ -1,5 +1,5 @@
-import { Movie } from 'src/database/entities/Movie';
-import { AppDataSource } from 'src/database/data-source';
+import { Movie } from '../../database/entities/Movie';
+import { AppDataSource } from '../../database/data-source';
 
 const movieRepository = AppDataSource.getRepository(Movie);
 
