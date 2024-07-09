@@ -16,7 +16,7 @@ const handleAsync =
 
 export const getMovies = handleAsync(async (req: Request, res: Response) => {
   const movies = await movieService.getMovies();
-  res.json(movies);
+  res.status(200).json(movies);
 });
 
 export const getMovieById = handleAsync(async (req: Request, res: Response) => {

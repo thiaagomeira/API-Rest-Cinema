@@ -32,6 +32,7 @@ export const createSession = async (
       room: sessionData.room,
       day: sessionData.day,
       time: sessionData.time,
+      movie: findMovie,
     },
   });
   if (existingSession) {
