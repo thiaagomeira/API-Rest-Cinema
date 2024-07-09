@@ -14,23 +14,20 @@ const handleAsync =
     }
   };
 
-// Obter todos os filmes
 export const getMovies = handleAsync(async (req: Request, res: Response) => {
-  const movies = await movieService.getMovies(); // Chama o serviço para obter todos os filmes
-  res.json(movies); // Retorna os filmes em formato JSON
+  const movies = await movieService.getMovies();
+  res.json(movies);
 });
 
-// Obter um filme por ID
 export const getMovieById = handleAsync(async (req: Request, res: Response) => {
-  const movie = await movieService.getMovieById(Number(req.params.id));
-  if (movie) {
-    res.json(movie); // Se o filme for encontrado, retorna-o em formato JSON
+  const result = await movieService.getMovieById(Number(req.params.id));
+  if ('code' in result) {
+    res.status(result.code).json(result);
   } else {
-    res.status(404).json({ message: 'Filme não encontrado!' }); // Se o filme não for encontrado, retorna um status 404 com mensagem de erro
+    res.status(201).json(result);
   }
 });
 
-// Criar um novo filme
 export const createMovie = handleAsync(async (req: Request, res: Response) => {
   const result = await movieService.createMovie(req.body);
   if ('code' in result) {
@@ -40,7 +37,6 @@ export const createMovie = handleAsync(async (req: Request, res: Response) => {
   }
 });
 
-// Atualizar um filme existente por ID
 export const updateMovie = handleAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const result = await movieService.updateMovie(Number(id), req.body);
@@ -51,12 +47,11 @@ export const updateMovie = handleAsync(async (req: Request, res: Response) => {
   }
 });
 
-// Deletar um filme por ID
 export const deleteMovie = handleAsync(async (req: Request, res: Response) => {
-  const success = await movieService.deleteMovie(Number(req.params.id)); // Deletar um filme por ID
-  if (success) {
-    res.status(204).send(); // Se o filme for deletado com sucesso, retorna um status 204
+  const result = await movieService.deleteMovie(Number(req.params.id));
+  if (result.code === 204) {
+    res.status(204).send();
   } else {
-    res.status(404).json({ message: 'Filme não encontrado!' });
+    res.status(result.code).json(result);
   }
 });
