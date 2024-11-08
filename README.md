@@ -1,3 +1,5 @@
+# Projeto desenvolvido junto a colegas de estágio para criação e desenvolvimento de API para gestão de salas, filmes e sessões de um cinema.
+
 # Cinema Management API
 
 API RESTful para a gestão de cinemas, desenvolvida em Node.js com TypeScript e SQLite como banco de dados. A API permite a criação, leitura, atualização e exclusão (CRUD) de filmes, sessões e ingressos.
